@@ -1,0 +1,46 @@
+PROCEDURE SWITCH LEAVE CURRENT YEAR TO LAST YEAR (EVERY 1st JANUARY)
+
+
+
+CREATE OR REPLACE PROCEDURE SP_getleaveavailability (inid IN varchar2, outcurr OUT number, outlast OUT number)
+AS 
+begin
+  select current_year, last_year into outcurr, outlast
+  from leaveavailability 
+  where id = inid;
+end;
+
+CREATE OR REPLACE PROCEDURE SP_updateleaveavailability(inid IN varchar2, incurr IN number, inlast IN number)
+AS
+begin
+ update leaveavailability set current_year=incurr,last_year=inlast where id=inid ;
+end;
+
+
+create or replace procedure SP_switchonfirstjuly
+is
+  cursor mydata is select id from leaveavailability;
+  result mydata%rowtype;
+  curr number;
+  last number;
+begin
+  for result in mydata loop
+    SP_getleaveavailability(result.id, curr, last);
+    curr := curr + 1;
+    SP_updateleaveavailability(result.id, curr, 0);
+
+  END LOOP; 
+end;
+
+
+begin
+    dbms_scheduler.create_job(job_name        => 'Switch_Leave_On_July',
+                              job_type        => 'STORED_PROCEDURE',
+                              job_action      => 'SP_switchonfirstjuly',
+                              start_date      => systimestamp,
+                              end_date        => null,
+                              repeat_interval => 'FREQ=YEARLY; BYDATE=0701;',
+                              enabled         => true,
+                              auto_drop       => false,
+                              comments        => 'Run a procedure to set last year leave count to zero');
+end;

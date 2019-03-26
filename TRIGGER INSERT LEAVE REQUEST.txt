@@ -1,0 +1,71 @@
+TRIGGER INSERT LEAVE REQUEST
+ - Insert leave request data
+ - Insert file(name)
+
+
+CREATE SEQUENCE SQ_masterleave 
+  MINVALUE 1
+  START WITH 5
+  INCREMENT BY 1
+  NOCACHE;
+
+
+CREATE OR REPLACE PROCEDURE SP_getleaveavailability (inid IN varchar2, outcurr OUT number, outlast OUT number)
+AS 
+begin
+  select current_year, last_year into outcurr, outlast
+  from leaveavailability 
+  where id = inid;
+end;
+
+
+
+CREATE OR REPLACE PROCEDURE SP_insertleaverequest(
+note IN varchar2,
+leave_duration IN number,
+start_from IN varchar2,
+finish_to IN varchar2,
+submit_date IN varchar2,
+employee_id IN varchar2,
+leave_category_id IN varchar2,
+current_year_before OUT number,
+last_year_before OUT number
+) 
+  AS
+BEGIN
+  SP_getleaveavailability(employee_id, current_year_before, last_year_before );
+
+  insert into masterleave values (
+  SQ_masterleave.nextval, note, leave_duration, TO_DATE(start_from, 'yyyy/mm/dd'),  TO_DATE(finish_to, 'yyyy/mm/dd'),
+  current_year_before ,last_year_before , TO_DATE(submit_date, 'yyyy/mm/dd'), 'Pending', 
+  null, employee_id, leave_category_id );
+END;
+
+
+CREATE OR REPLACE TRIGGER TR_masterleaveinsertfile
+    AFTER INSERT ON masterleave
+    FOR EACH ROW
+    BEGIN
+       SP_insertfile(null, 'file for '||:new.id, :new.id);
+    END;
+
+
+CREATE OR REPLACE PROCEDURE SP_insertfile(
+id IN varchar2,
+name IN varchar2,
+leave_id IN varchar2
+) 
+  AS
+BEGIN
+  insert into masterfile values (id, name, leave_id );
+END
+
+
+
+
+declare 
+x number;
+y number;
+begin
+SP_insertleaverequest('Please Approve',1,'2019/03/21','2019/03/22','2019/03/07',10004,'LC_1',x,y);
+End

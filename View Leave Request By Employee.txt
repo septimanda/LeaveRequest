@@ -1,0 +1,50 @@
+
+create or replace procedure SP_ViewLeave 
+IS
+ cursor e_data is
+ select
+  Me.Name nama, 
+  Ml.Id leave,
+  Ml.Name Namas,
+  Ml.note note, 
+  Ml.leave_duration duration, 
+  Ml.start_from startt, 
+  Ml.finish_to finish,
+  Ml.current_year_before currentt, 
+  Ml.last_year_before lastt,
+  Ml.request_status request,  
+  Ml.submit_date submit,
+  Ml.approval_date approval,  
+  Me.Id employee,
+  Ml.category_id category
+from MasterEmployee Me
+ JOIN MasterLeave Ml
+ ON Me.Id=Ml.employee_id
+
+WHERE Me.Id='B105';
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Employee Name : '||e_rec.nama);
+   dbms_output.put_line('Leave Id : '||e_rec.leave);
+   dbms_output.put_line('Leave Name: '||e_rec.namas);
+   dbms_output.put_line('Leave Note: '||e_rec.note);
+   dbms_output.put_line('Leave Duration : '||e_rec.duration);
+   dbms_output.put_line('Start from : '||e_rec.startt);
+   dbms_output.put_line('Finish To : '||e_rec.finish);
+   dbms_output.put_line('Current Year Before : '||e_rec.currentt);
+   dbms_output.put_line('Last Year Before : '||e_rec.lastt);
+   dbms_output.put_line('Request Status : '||e_rec.request);
+   dbms_output.put_line('Submit Date : '||e_rec.submit);
+   dbms_output.put_line('Submit Date : '||e_rec.approval);
+   dbms_output.put_line('Employee Id : '||e_rec.employee);
+   dbms_output.put_line('Category Id : '||e_rec.category);
+   
+   end loop;
+end;
+
+
+BEGIN
+  SP_ViewLeave();
+end;

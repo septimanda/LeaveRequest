@@ -1,0 +1,1038 @@
+======================Prosedure INSERT, DELETE, UPDATE, VIEW LEAVE REQUEST ================
+
+1. TABLE MASTERROLE
+
+//INSERT//
+
+create or replace procedure SP_role ( 
+         id IN varchar2, name IN varchar)
+
+IS
+begin 
+  insert into MasterRole 
+values (id, name);
+end;
+
+begin SP_role ('01', 'Admin');
+end;
+
+begin SP_role ('02', 'Manager');
+end;
+
+begin SP_role ('04', 'Suvervisor');
+end;
+
+
+//UPDATE//
+create or replace procedure SP_Updaterole ( 
+         izd IN varchar2, namze IN varchar)
+
+IS
+
+begin 
+  update  MasterRole set name = namze where id=izd ;
+end;
+
+begin SP_Updaterole ('04', 'Direktor');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewRole
+IS
+ cursor e_data is select id, name from MasterRole;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('ID : '||e_rec.id);
+   dbms_output.put_line('Name Role : '||e_rec.name);
+   
+ end loop;
+end;
+
+begin SP_ViewRole();
+end;
+
+
+2. TABLE MASTERLOGIN
+
+// Membuat Login //
+
+create or replace procedure SP_login ( 
+         id IN varchar2, 
+         username IN varchar2,
+         password IN varchar2,
+         role_id IN varchar2)
+
+IS
+
+begin 
+  insert into MasterLogin 
+values (id, username, password, role_id);
+end;
+
+begin SP_login ('B104', 'yohanaginting@gmail.com', 'ASASAKSAKSAK', '01');
+end;
+
+begin SP_login ('B105', 'ivanaasa@gmail.com', 'ASASAKSAKSAK', '01');
+end;
+
+begin SP_login ('B101', 'rizkaasad@gmail.com', 'ASASAKSAKSAK', '02');
+end;
+
+select * from MasterLogin;
+
+
+
+3.TABLE MASTERRELIGION
+
+//INSERT//
+
+create or replace procedure SP_Religion ( 
+         id IN varchar2, 
+         name IN varchar2)
+
+IS
+
+begin 
+  insert into MasterReligion
+values (id, name);
+end;
+
+begin SP_Religion ('KP', 'Kristen Protestan');
+end;
+
+begin SP_Religion ('IS', 'ISLAM');
+end;
+
+begin SP_Religion ('KK', 'Kristen Katholik');
+end;
+
+begin SP_Religion ('B', 'Budha');
+end;
+
+begin SP_Religion ('K', 'KONGHUCHU');
+end;
+
+SELECT * FROM masterreligion;
+
+//VIEW//
+
+create or replace procedure SP_ViewReligion
+IS
+ cursor e_data is select id, name from MasterReligion;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('ID : '||e_rec.id);
+   dbms_output.put_line('Religion Name : '||e_rec.name);
+   
+ end loop;
+end;
+
+begin SP_ViewReligion();
+end;
+
+
+4. TABLE MASTERJOB
+
+//INSERT//
+
+create or replace procedure SP_Job ( 
+         id IN varchar2, 
+         name IN varchar2)
+IS
+
+begin 
+  insert into MasterJob
+values (id, name);
+end;
+
+begin SP_Job ('IT_PROG', 'Programmer');
+end;
+
+begin SP_Job ('IT_ASS', 'IT Trainer');
+end;
+
+begin SP_Job ('IT_SAL', 'IT Sales');
+end;
+
+//UPDATE//
+
+create or replace procedure SP_UpdateJob ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterJob set name = namze where id=izd ;
+end;
+
+begin SP_UpdateJob ('IT_SAL', 'Sales ASSISTANT');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewJob
+IS
+ cursor e_data is select id, name from MasterJob;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Job Name : '||e_rec.name);
+   
+ end loop;
+end;
+
+begin SP_ViewJob();
+end;
+
+
+5. TABLE MASTERDEPARTMENT
+
+//INSERT//
+
+create or replace procedure SP_Department ( 
+         id IN varchar2, 
+         name IN varchar2)
+IS
+
+begin 
+  insert into MasterDepartment
+values (id, name);
+end;
+
+begin SP_Department ('60', 'IT');
+end;
+
+begin SP_Department ('100', 'Finance');
+end;
+
+begin SP_Department ('120', 'Accounting');
+end;
+
+
+//UPDATE//
+
+create or replace procedure SP_UpdateDepartment ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterDepartment set name = namze where id=izd ;
+end;
+
+begin SP_UpdateDepartment ('60', 'HRD');
+end;
+
+//DELETE//
+
+create or replace procedure SP_DeleteDepartment ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  delete MasterDepartment where id=60 ;
+end;
+
+begin SP_DeleteDepartment ('60', 'HRD');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewDepartment
+IS
+ cursor e_data is select id, name from MasterDepartment;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Department Name : '||e_rec.name);
+   
+ end loop;
+end;
+
+begin SP_ViewDepartment();
+end;
+
+
+6. TABLE PARAMETER
+
+create or replace procedure SP_Parameter ( 
+         id IN varchar2, 
+         name IN varchar2,
+         value IN number)
+IS
+begin 
+  insert into Parameter
+values (id, name, value);
+end;
+
+begin SP_Parameter ('M01', 'Maxmimal Cuti', 5);
+end;
+
+begin SP_Parameter ('M02', 'Minimal Cuti', 1);
+end;
+
+7. TABLE MASTERLEAVECATEGORY
+
+//Insert//
+
+create or replace procedure SP_LeaveCategory ( 
+         id IN varchar2, 
+         name IN varchar2,
+         leave_days IN number,
+         leave_for IN varchar2)
+IS
+
+begin 
+  insert into MasterLeaveCategory
+values (id, name, leave_days, leave_for);
+end;
+
+begin SP_LeaveCategory ('B011', 'Cuti Spesial', 5, 'P');
+end;
+
+begin SP_LeaveCategory ('B012', 'Cuti Normal', 10, 'L');
+end;
+
+begin SP_LeaveCategory ('B013', 'Cuti Spesial', 12, 'P');
+end;
+
+//UPDATE//
+
+create or replace procedure SP_UpdateLeaveCategory ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterLeaveCategory set name = namze where id=izd ;
+end;
+
+begin SP_UpdateLeaveCategory ('B011', 'Cuti Normal');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewLeaveCategory
+IS
+ cursor e_data is select id, name, leave_days, leave_for from MasterLeaveCategory;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Leave Category : '||e_rec.name);
+   dbms_output.put_line('Leave Days : '||e_rec.leave_days);
+   dbms_output.put_line('Leave For : '||e_rec.leave_for);
+   
+ end loop;
+end;
+
+begin SP_ViewLeaveCategory();
+end;
+
+8. TABLE MASTERPROVINCE
+
+//Insert//
+
+create or replace procedure SP_Province ( 
+         id IN varchar2, 
+         name IN varchar2)         
+IS
+
+begin 
+  insert into MasterProvince
+values (id, name);
+end;
+
+begin SP_Province ('560013', 'Jawa Tengah');
+end;
+
+begin SP_Province ('560014', 'Jawa Timur');
+end;
+
+begin SP_Province ('560015', 'Jawa Barat');
+end;
+
+begin SP_Province ('560020', 'Sumatera Utara');
+end;
+
+begin SP_Province ('560040', 'Sumatera Selatan');
+end;
+
+
+//UPDATE//
+
+create or replace procedure SP_UpdateProvince ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterProvince set name = namze where id=izd ;
+end;
+
+begin SP_UpdateProvince ('560015', 'Sumatera Barat');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewProvince
+IS
+ cursor e_data is select id, name from MasterProvince;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Province Name : '||e_rec.name);
+   
+end loop;
+end;
+
+begin SP_ViewProvince();
+end;
+
+
+9. TABLE MASTERREGENCY
+
+//Insert//
+
+create or replace procedure SP_Regency ( 
+         id IN varchar2, 
+         name IN varchar2,
+         province_id varchar2)         
+IS
+
+begin 
+  insert into MasterRegency
+values (id, name, province_id);
+end;
+
+begin SP_Regency ('20014', 'Malang', '560014');
+end;
+
+begin SP_Regency ('20012', 'Semarang', '560013' );
+end;
+
+
+//UPDATE//
+
+create or replace procedure SP_UpdateRegency ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterRegency set name = namze where id=izd ;
+end;
+
+begin SP_UpdateRegency ('20014', 'Salatiga');
+end;
+
+
+//VIEW//
+
+create or replace procedure SP_ViewRegency
+IS
+ cursor e_data is select id, name, province_id from MasterRegency;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Regency Name : '||e_rec.name);
+   dbms_output.put_line('Province Id : '||e_rec.province_id);
+end loop;
+end;
+
+begin SP_ViewRegency();
+end;
+
+ 
+10. TABLE MASTERDISTRICT 
+
+create or replace procedure SP_District ( 
+         id IN varchar2, 
+         name IN varchar2,
+         regency_id varchar2)         
+IS
+
+begin 
+  insert into MasterDistrict
+values (id, name, regency_id);
+end;
+
+begin SP_District ('30023', 'Tembalang', '20012');
+end;
+
+begin SP_District ('30024', 'Ungaran', '20012' );
+end;
+
+begin SP_District ('30025', 'Kopeng', '20012' );
+end;
+
+
+//UPDATE//
+
+create or replace procedure SP_UpdateDistrict ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterDistrict set name = namze where id=izd ;
+end;
+
+begin SP_UpdateDistrict ('30025', 'Semarang');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewDistrict
+IS
+ cursor e_data is select id, name, regency_id from MasterDistrict;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('District Name : '||e_rec.name);
+   dbms_output.put_line('Regency Id : '||e_rec.regency_id);
+end loop;
+end;
+
+begin SP_ViewDistrict();
+end;
+
+
+12. TABLE MASTERVILLAGE
+
+//INSERT//
+
+create or replace procedure SP_Village ( 
+         id IN varchar2, 
+         name IN varchar2,
+         district_id varchar2)         
+IS
+
+begin 
+  insert into MasterVillage
+values (id, name, district_id);
+end;
+
+begin SP_Village ('56001', 'Tembalang', '30025');
+end;
+
+begin SP_Village ('56003', 'Bulusan', '30025' );
+end;
+
+begin SP_Village ('56005', 'Banjar Sari', '30025' );
+end;
+
+
+//UPDATE//
+
+create or replace procedure SP_UpdateVillage ( 
+         izd IN varchar2, namze IN varchar)
+IS
+
+begin 
+  update  MasterVillage set name = namze where id=izd ;
+end;
+
+begin SP_UpdateVillage ('56005', 'Meteseh');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewVillage
+IS
+ cursor e_data is select id, name, district_id from MasterVillage;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('District Name : '||e_rec.name);
+   dbms_output.put_line('Regency Id : '||e_rec.regency_id);
+end loop;
+end;
+
+begin SP_ViewVillage();
+end;
+
+
+13. TABLE MASTERHOLIDAY
+
+create or replace procedure SP_Holiday ( 
+         id IN varchar2, 
+         holiday_date IN date,
+         holiday_type varchar2,
+         description varchar2,
+         day varchar2)         
+IS
+
+begin 
+  insert into MasterHoliday
+values (id, Holiday_date, Holiday_type, description, day);
+end;
+
+begin SP_Holiday ('01', TO_DATE('2019-06-01', 'YYYY-MM-DD'), 'Hari Lahir Pancasila', 
+'Hari kelahiran Pancasila', 'Selasa' );
+end;
+
+begin SP_Holiday ('02', TO_DATE('2019-04-20', 'YYYY-MM-DD'), 'Hari Kenaikan Yesus Kristus', 
+'Hari kenaikan Yesus Kristus', 'Rabu' );
+end;
+
+begin SP_Holiday ('03', TO_DATE('2019-12-25', 'YYYY-MM-DD'), 'Hari Kelahiran Yesus Kristus', 
+'Hari Kelahiran Yesus Kristus', 'Jumat' );
+end;
+
+begin SP_Holiday ('04', TO_DATE('2019-05-05', 'YYYY-MM-DD'), 'Hari Raya Idul Fitri', 
+'Hari Raya Idul Fitri', 'Jumat' );
+end;
+
+//UPDATE//
+
+create or replace procedure SP_UpdateHoliday ( 
+         ids IN varchar2, 
+         days IN varchar2)
+IS
+
+begin 
+  update  MasterHoliday set day = days where id=ids;
+end;
+
+begin SP_UpdateHoliday ('04', 'Sabtu');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewHoliday
+IS
+ cursor e_data is select id, holiday_date, holiday_type, description, day from MasterHoliday;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Holiday Date : '||e_rec.holiday_date);
+   dbms_output.put_line('Holiday Type : '||e_rec.holiday_type);
+   dbms_output.put_line('Description : '||e_rec.description);
+   dbms_output.put_line('Day : '||e_rec.day);
+end loop;
+end;
+
+begin SP_ViewHoliday();
+end;
+
+
+14. TABLE LEAVEAVAILLABILITY
+
+//INSERT//
+
+create or replace procedure SP_LeaveAvaillability ( 
+         id IN varchar2, 
+         current_year IN number,
+         last_year IN number)         
+IS
+
+begin 
+  insert into LeaveAvaillability
+values (id, current_year, last_year);
+end;
+
+begin SP_LeaveAvaillability ('01', 5, 5 );
+end;
+
+begin SP_LeaveAvaillability ('02', 6, 7 );
+end;
+
+begin SP_LeaveAvaillability ('03', 8, 5 );
+end;
+
+begin SP_LeaveAvaillability ('04', 6, 7 );
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewAvaillability
+IS
+ cursor e_data is select id, current_year, last_year from LeaveAvaillability;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Current Year : '||e_rec.current_year);
+   dbms_output.put_line('Last Year : '||e_rec.last_year);
+   
+ end loop;
+end;
+
+begin SP_ViewAvaillability();
+end;
+
+
+15. TABLE MASTEREMPLOYEE
+
+//INSERT//
+
+create or replace procedure SP_Employee ( 
+         id IN varchar2, 
+         name IN varchar2,
+         email IN varchar2,
+         gender IN varchar2,
+         phone_number IN varchar2,
+         hire_date IN date,
+         street IN varchar2,
+         isMarried IN varchar2,
+         job_id IN varchar2,
+         village_id IN varchar2,
+         religion_id IN varchar2,
+         manager_id IN varchar2,
+         department_id IN varchar2)         
+IS
+
+begin 
+  insert into MasterEmployee
+values (id, name, email, gender, phone_number, hire_date, street, isMarried, job_id, village_id
+, religion_id, manager_id, department_id);
+
+end;
+
+begin SP_Employee ('B101', 'Yohana Agustina', 'yohanaginting@gmail.com',
+'P', '00987654321', TO_DATE('2019-03-20', 'YYYY-MM-DD'), 'Jalan Gelong Baru barat', 'Y', 'IT_PROG'
+, '56001', 'B', 'B101', '250');
+end;
+
+begin SP_Employee ('B103', 'Rizka Nurhaeni', 'rizkanur@gmail.com',
+'P', '00987654321', TO_DATE('2019-03-01', 'YYYY-MM-DD'), 'Jalan Gelong Baru Timur', 'N', 'IT_PROG'
+, '56001', 'B', 'B103', '250');
+end;
+
+begin SP_Employee ('B104', 'Raja Ahsan N', 'raja@gmail.com',
+'L', '00976543654321', TO_DATE('2019-02-01', 'YYYY-MM-DD'), 'Jalan Gelong Baru Selatan', 'Y', 'ACC'
+, '56001', 'KP', 'B104', '250');
+end;
+
+begin SP_Employee ('B105', 'Ronaldo S', 'ronaldo@gmail.com',
+'L', '009765436444321', TO_DATE('2019-02-01', 'YYYY-MM-DD'), 'Jalan Gelong Baru Utara', 'N', 'F'
+, '56001', 'KK', 'B105', '250');
+end;
+
+//UPDATE//
+
+create or replace procedure SP_UpdateEmployee ( 
+         izd IN varchar2, 
+         emails IN varchar2,
+         phone_numbers IN varchar2,
+         streets IN varchar2)
+IS
+
+begin 
+  update  MasterEmployee set email=emails, phone_number=phone_numbers, street=streets where id=izd ;
+end;
+
+begin SP_UpdateEmployee ('B105', 'rollll@gmail.com', '654322345876', 'Jalan duren Timur 4');
+end;
+
+select * from MasterEmployee;
+
+// DELETE //
+
+create or replace procedure SP_DeleteEmployee ( 
+         id IN varchar2, 
+         name IN varchar2)
+
+IS
+
+begin 
+  delete MasterEmployee where id='B103' ;
+end;
+
+begin SP_DeleteEmployee ('B103', 'Rizka Nurhaeni');
+end;
+
+//VIEW//
+
+create or replace procedure SP_ViewEmployee
+IS
+ cursor e_data is select id, name, email, 
+ gender, phone_number, hire_date,
+ street, isMarried, job_id, village_id,
+ religion_id, manager_id, department_id from MasterEmployee;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Name : '||e_rec.name);
+   dbms_output.put_line('Email : '||e_rec.email);
+   dbms_output.put_line('Gender : '||e_rec.gender);
+   dbms_output.put_line('Phone Number : '||e_rec.phone_number);
+   dbms_output.put_line('Hire Date : '||e_rec.hire_date);
+   dbms_output.put_line('Street : '||e_rec.street);
+   dbms_output.put_line('isMarried : '||e_rec.isMarried);
+   dbms_output.put_line('Job Id : '||e_rec.job_id);
+   dbms_output.put_line('Village Id : '||e_rec.village_id);
+   dbms_output.put_line('Religion : '||e_rec.religion_id);
+   dbms_output.put_line('Manager Id : '||e_rec.manager_id);
+   dbms_output.put_line('Department Id : '||e_rec.department_id);
+end loop;
+end;
+
+begin SP_ViewEmployee();
+end;
+
+
+16. TABLE MASTERLEAVE
+
+//INSERT//
+
+create or replace procedure SP_Leave( 
+         id IN varchar2, 
+         name IN varchar2,
+         note IN varchar2,
+         leave_duration IN number,
+         start_from IN date,
+         finish_to IN date,
+         current_year_before IN number,
+         last_year_before IN number,
+         submit_date IN date,
+         request_status IN varchar2,
+         approval_date IN date,
+         employee_id IN varchar2,
+         category_id IN varchar2)         
+IS
+
+begin 
+  insert into MasterLeave
+values (id, name, note, leave_duration, start_from, finish_to, current_year_before,
+last_year_before, request_status, submit_date, approval_date, employee_id
+,category_id);
+
+end;
+
+begin SP_Leave ('001', 'Cuti Spesial', 'ddkkdaskdskdss', 10, TO_DATE('2019-03-20', 'YYYY-MM-DD'), TO_DATE('2019-03-30', 'YYYY-MM-DD'),
+2, 6, TO_DATE('2019-04-21', 'YYYY-MM-DD'), 'Approval', TO_DATE('2019-03-26', 'YYYY-MM-DD'), 'B105', 'B011' );
+end;
+
+begin SP_Leave ('002', 'Cuti Normal', 'ddkkdaskdskdss', 4, TO_DATE('2019-04-10', 'YYYY-MM-DD'), TO_DATE('2019-04-14', 'YYYY-MM-DD'),
+5, 2, TO_DATE('2019-04-21', 'YYYY-MM-DD'), 'Rejected', TO_DATE('2019-04-15', 'YYYY-MM-DD'), 'B104', 'B011' );
+end;
+
+begin SP_Leave ('003', 'Cuti Spesial', 'ddkkdaskdskdss', 20, TO_DATE('2019-03-20', 'YYYY-MM-DD'), TO_DATE('2019-03-30', 'YYYY-MM-DD'),
+2, 6, TO_DATE('2019-04-21', 'YYYY-MM-DD'), 'Approval', TO_DATE('2019-03-30', 'YYYY-MM-DD'), 'B101', 'B011' );
+end;
+
+//Update//
+
+create or replace procedure SP_UpdateLeave ( 
+         izd IN varchar2, 
+         names IN varchar2,
+         leave_durations IN number,
+         start_froms IN date,
+         finish_tos IN date)
+IS
+
+begin 
+  update  MasterLeave set id=izd, name=names, leave_duration=leave_durations, start_from=start_from, finish_to=finish_tos where id=izd ;
+end;
+
+begin SP_UpdateLeave ('003', 'Cuti Spesial', 14, TO_DATE('2019-03-09', 'YYYY-MM-DD'), TO_DATE('2019-03-23', 'YYYY-MM-DD'));
+end;
+
+// DELETE //
+
+create or replace procedure SP_DeleteLeave ( 
+         id IN varchar2, 
+         name IN varchar2)
+
+IS
+
+begin 
+  delete MasterLeave where id='003' ;
+end;
+
+begin SP_DeleteLeave ('003', 'Cuti Spesial');
+end;
+
+select * from MasterLeave ;
+
+//VIEW//
+
+create or replace procedure SP_ViewLeave
+IS
+ cursor e_data is select id, name, note, 
+ leave_duration, start_from, finish_to,
+ current_year_before, last_year_before, submit_date, request_status,
+ approval_date, employee_id, category_id from MasterLeave;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('Name : '||e_rec.name);
+   dbms_output.put_line('Note : '||e_rec.note);
+   dbms_output.put_line('Leave Duration : '||e_rec.leave_duration);
+   dbms_output.put_line('Start From : '||e_rec.start_from);
+   dbms_output.put_line('Finish To : '||e_rec.finish_to);
+   dbms_output.put_line('Current Year Before : '||e_rec.current_year_before);
+   dbms_output.put_line('Last Year Before : '||e_rec.last_year_before);
+   dbms_output.put_line('Submit Date : '||e_rec.submit_date);
+   dbms_output.put_line('Request Status : '||e_rec.request_status);
+   dbms_output.put_line('Approval : '||e_rec.approval_date);
+   dbms_output.put_line('Employee Id : '||e_rec.employee_id);
+   dbms_output.put_line('Category Id : '||e_rec.category_id);
+end loop;
+end;
+
+begin SP_ViewLeave();
+end;
+
+17. TABLE MASTERFILE
+
+//INSERT// 
+
+create or replace procedure SP_File ( 
+         id IN varchar2, 
+         name IN varchar2,
+         leave_id varchar2)         
+IS
+
+begin 
+  insert into MasterFile
+values (id, name, leave_id);
+end;
+
+begin SP_File ('B1', 'Berkas Syarat Cuti', '001');
+end;
+
+begin SP_File ('B2', 'Berkas Syarat Cuti', '002');
+end;
+
+begin SP_File ('B3', 'Berkas Cuti Sementara', '003' );
+end;
+
+//UPDATE//
+
+create or replace procedure SP_UpdateFile ( 
+         izd IN varchar2, names IN varchar)
+IS
+
+begin 
+  update  MasterFile set name = names where id=izd ;
+end;
+
+begin SP_UpdateFile ('B1', 'Berkas yang tidak ada berkasnya');
+end;
+
+select * from MasterFile;
+
+//DELETE//
+
+create or replace procedure SP_DeleteFile ( 
+         id IN varchar2, 
+         name IN varchar2)
+IS
+
+begin 
+  delete MasterFile where id='B1' ;
+end;
+
+begin SP_DeleteFile ('B1', 'Berkas yang tidak ada berkasnya');
+end;
+
+select * from MasterFile ;
+
+//VIEW//
+
+create or replace procedure SP_ViewFile
+IS
+ cursor e_data is select id, name, leave_id from MasterFile;
+
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Id : '||e_rec.id);
+   dbms_output.put_line('File Name : '||e_rec.name);
+   dbms_output.put_line('Leave Id : '||e_rec.leave_id);
+   
+ end loop;
+end;
+
+begin SP_ViewFile();
+end;
+
+
+============================== PROSEDURE VIEW LEAVE REQUEST ====================================
+
+create or replace procedure SP_ViewLeave 
+IS
+ cursor e_data is
+ select
+  Me.Name nama, 
+  Ml.Id leave, 
+  Ml.Name namas,
+  Ml.note note, 
+  Ml.leave_duration duration, 
+  Ml.start_from startt, 
+  Ml.finish_to finish,
+  Ml.current_year_before current, 
+  Ml.last_year_before lastt,
+  Ml.request_status request,  
+  Ml.submit_date submit,
+  Ml.approval_date approval,  
+  Me.Id employee,
+  Ml.category_id category
+from MasterEmployee Me
+ JOIN MasterLeave Ml
+ ON Me.Id=Ml.employee_id
+
+WHERE Me.Id='B105';
+ e_rec e_data%rowtype;
+ begin
+  for e_rec in e_data loop
+   dbms_output.put_line('---------------------');
+   dbms_output.put_line('Employee Name : '||e_rec.nama);
+   dbms_output.put_line('Leave Id : '||e_rec.leave);
+   dbms_output.put_line('Leave Name : '||e_rec.namas);
+   dbms_output.put_line('Leave Note: '||e_rec.note);
+   dbms_output.put_line('Leave Duration : '||e_rec.duration);
+   dbms_output.put_line('Start from : '||e_rec.startt);
+   dbms_output.put_line('Finish To : '||e_rec.finish);
+   dbms_output.put_line('Current Year Before : '||e_rec.current);
+   dbms_output.put_line('Last Year Before : '||e_rec.lastt);
+   dbms_output.put_line('Request Status : '||e_rec.request);
+   dbms_output.put_line('Submit Date : '||e_rec.submit);
+   dbms_output.put_line('Submit Date : '||e_rec.approval);
+   dbms_output.put_line('Employee Id : '||e_rec.employee);
+   dbms_output.put_line('Category Id : '||e_rec.category);
+   
+   end loop;
+end;
+
+
+BEGIN
+  SP_ViewLeave();
+end;
+  

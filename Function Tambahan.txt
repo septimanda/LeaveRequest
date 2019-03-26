@@ -1,0 +1,149 @@
+================ FUNCTION LEAVE REQUEST =======================
+
+
+CREATE OR REPLACE FUNCTION FN_getnewleavecount(inid IN varchar2)
+   return varchar2 IS result varchar2(20);
+   current_before number;
+   last_before number;
+   duration number;
+   Id varchar2 (15);
+   new_count number;
+BEGIN
+
+   Select current_year_before, last_year_before, leave_duration, employee_id into current_before, last_before, duration, Id
+from
+   masterleave ml join leaveavaillability la
+on
+   ml.employee_id=la.id
+where ml.id= inid;
+
+
+if (last_before < duration ) then 
+   new_count := current_before + last_before;
+   new_count := new_count - duration;
+   result := new_count||','||0;
+else if (last_before >= duration) then
+   new_count := last_before - duration;
+   result := current_before ||','||new_count;
+end if;
+end if;
+
+return result;
+end;
+
+
+select  FN_getnewleavecount(04) from dual;
+
+
+// TRIGGER LOGIN
+ 
+TRIGGER INSERT EMPLOYEE
+ - Insert employee data
+ - Insert login data
+ - Insert leave availability (la)
+
+
+CREATE OR REPLACE PROCEDURE SP_insertlogin (inid IN varchar2, inemail IN varchar2)
+  AS
+BEGIN
+  insert into masterlogin values (inid, 'inemail', 'passdefault', 'ROLE_EMP');
+END;
+
+
+
+CREATE OR REPLACE PROCEDURE SP_insert_la (inid IN varchar2)
+  AS
+BEGIN
+  insert into leaveavaillability values (inid,0,0);
+END;
+
+
+CREATE SEQUENCE SQ_masteremployee 
+  MINVALUE 1
+  START WITH 10000
+  INCREMENT BY 1
+  NOCACHE;
+
+CREATE OR REPLACE TRIGGER TR_masteremployee
+AFTER INSERT ON masteremployee
+FOR EACH ROW
+  BEGIN
+    SP_insertlogin(:new.id, :new.email);
+    SP_insert_la(:new.id);
+  END;
+
+insert into masterlogin values ('B107', 'ratna@gmail.com', 'fsdfsfsfs', '04');
+
+
+============= TRIGGER INSERT EMPLOYEE ===================
+
+==========================  TRIGGER INSERT LEAVE REQUEST  ==================================
+
+ - Insert leave request data
+ - Insert file(name)
+
+
+CREATE SEQUENCE SQ_masterleave 
+  MINVALUE 1
+  START WITH 5
+  INCREMENT BY 1
+  NOCACHE;
+
+
+CREATE OR REPLACE PROCEDURE SP_getleaveavaillability (inid IN varchar2, outcurr OUT number, outlast OUT number)
+AS 
+begin
+  select current_year, last_year into outcurr, outlast
+  from leaveavaillability 
+  where id = inid;
+end;
+
+
+
+CREATE OR REPLACE PROCEDURE SP_insertleaverequest(
+note IN varchar2,
+leave_duration IN number,
+start_from IN varchar2,
+finish_to IN varchar2,
+submit_date IN varchar2,
+employee_id IN varchar2,
+category_id IN varchar2,
+current_year_before OUT number,
+last_year_before OUT number
+) 
+  AS
+BEGIN
+  SP_getleaveavaillability(employee_id, current_year_before, last_year_before );
+
+  insert into masterleave values (
+  SQ_masterleave.nextval, note, leave_duration, TO_DATE(start_from, 'yyyy/mm/dd'),  TO_DATE(finish_to, 'yyyy/mm/dd'),
+  current_year_before ,last_year_before , TO_DATE(submit_date, 'yyyy/mm/dd'), 'Pending', 
+  null, employee_id, category_id );
+END;
+
+
+CREATE OR REPLACE TRIGGER TR_masterleaveinsertfile
+    AFTER INSERT ON masterleave
+    FOR EACH ROW
+    BEGIN
+       SP_insertfile(null, 'file for '||:new.id, :new.id);
+    END;
+
+
+CREATE OR REPLACE PROCEDURE SP_insertfile(
+id IN varchar2,
+name IN varchar2,
+leave_id IN varchar2
+) 
+  AS
+BEGIN
+  insert into masterfile values (id, name, leave_id );
+END
+
+declare 
+x number;
+y number;
+begin
+SP_insertleaverequest('Please Approve',1,'2019/03/21','2019/03/22','2019/03/07','B101',003,x,y);
+End
+
